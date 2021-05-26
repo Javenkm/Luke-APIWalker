@@ -1,23 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import Search from './components/Search';
+import { useState } from 'react';
+import { Router, navigate } from '@reach/router';
+import Display from './views/Display';
 
 function App() {
+  const [searchTerms, setSearchTerms] = useState({
+    category: 'people',
+    id: ''
+  });
+
+  const [data, setData] =useState({
+
+  });
+
+  const changeHandler = e => {
+    setSearchTerms({
+      ...searchTerms,
+      [e.target.name]: e.target.value
+    })
+  };
+
+  const submitHandler = e => {
+    const { category, id } = searchTerms;
+    e.preventDefault();
+    navigate('/${category}/${id}');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <Search searchTerms={ searchTerms } changeHandler={ changeHandler }submitHandler={ submitHandler } />
+      <Router>
+        <Display path="/:category/:id"/>
+      </Router>
     </div>
   );
 }
